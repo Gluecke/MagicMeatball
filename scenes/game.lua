@@ -22,7 +22,7 @@ local meatBall = display.newCircle( xDisplay / 2, yDisplay / 2, xDisplay * .05 )
 
 local meatBallPhysParams = {
 
-    density = .2,
+    density = .1,
     friction = .5,
     bounce = 0,
     radius = xDisplay * .05
@@ -63,7 +63,7 @@ local function onAccelerate( event )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
 
-    local gravMulti = 10
+    local gravMulti = 5
 
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1
