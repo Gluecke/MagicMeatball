@@ -13,7 +13,7 @@ math.randomseed( os.time() )
 
 if device.isAndroid then
 	widget.setTheme( "widget_theme_android_holo_light" )
-    store = require("plugin.google.iap.v3")
+    --store = require("plugin.google.iap.v3")
 end
 
 --
