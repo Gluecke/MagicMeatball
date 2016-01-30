@@ -30,16 +30,28 @@ function scene:create( event )
     background.y = display.contentCenterY
     sceneGroup:insert(background)
 
-    local title = display.newText( "Game Title", 100, 32, native.systemFontBold, 32)
+    local title = display.newText( "Magic Meatball", 100, 32, native.systemFontBold, 32)
     title.x = display.contentCenterX
-    title.y = 40
+    title.y = display.contentHeight * .25
     title:setFillColor( 0 )
     sceneGroup:insert( title )
 
-    local creditText = display.newText( "Game by Me!", 250, 250, native.systemFont, 16 )
+    local creditText = display.newText( "Game by:", 250, 250, native.systemFont, 16 )
     creditText:setFillColor( 0 )
     creditText.x = display.contentCenterX
-    creditText.y = display.contentCenterY 
+    creditText.y = display.contentHeight * .50
+    sceneGroup:insert(creditText)
+
+    local creditText = display.newText( "Natasha Matthews and", 250, 250, native.systemFont, 16 )
+    creditText:setFillColor( 0 )
+    creditText.x = display.contentCenterX
+    creditText.y = display.contentHeight * .55
+    sceneGroup:insert(creditText)
+
+    local creditText = display.newText( "Garrett Luecke", 250, 250, native.systemFont, 16 )
+    creditText:setFillColor( 0 )
+    creditText.x = display.contentCenterX
+    creditText.y = display.contentHeight * .60
     sceneGroup:insert(creditText)
 
     -- http://www.freesfx.co.uk

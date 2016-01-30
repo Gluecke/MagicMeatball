@@ -8,57 +8,70 @@ local json = require( "json" )
 local utility = require( "scripts.utility" )
 local physics = require( "physics" )
 local myData = require( "scripts.mydata" )
+local math = require( "math")
 
 -- 
--- define local variables here
+--local variables
 --
 local xDisplay = display.contentWidth
 local yDisplay = display.contentHeight
-local currentScore          -- used to hold the numeric value of the current score
-local currentScoreDisplay   -- will be a display.newText() that draws the score on the screen
-local vXGravOptions = { text = "xGrav: ", x = xDisplay * .50, y = yDisplay * .1, fontSize = 42, font = native.systemFontBold, align = "center"}
-local vYGravOptions = { text = "yGrav: ", x = xDisplay * .50, y = yDisplay * .2,fontSize = 42, font = native.systemFontBold, align = "center"}
-local vZGravOptions = { text = "zGrav: ", x = xDisplay * .50, y = yDisplay * .3,fontSize = 42, font = native.systemFontBold, align = "center"}
+local vXGravOptions = { text = "xGrav: ", x = xDisplay * .15, y = yDisplay * .05, fontSize = 12, font = native.systemFontBold, align = "left"}
+local vYGravOptions = { text = "yGrav: ", x = xDisplay * .15, y = yDisplay * .075,fontSize = 12, font = native.systemFontBold, align = "left"}
 
-local vXGyroOptions = { text = "xGyro: ", x = xDisplay * .50, y = yDisplay * .5,fontSize = 42, font = native.systemFontBold, align = "center"}
-local vYGyroOptions = { text = "yGyro: ", x = xDisplay * .50, y = yDisplay * .6,fontSize = 42, font = native.systemFontBold, align = "center"}
-local vZGyroOptions = { text = "zGyro: ", x = xDisplay * .50, y = yDisplay * .7,fontSize = 42, font = native.systemFontBold, align = "center"}
+local meatBall = display.newCircle( xDisplay / 2, yDisplay / 2, xDisplay * .05 )
+
+local meatBallPhysParams = {
+
+    density = .2,
+    friction = .5,
+    bounce = 0,
+    radius = xDisplay * .05
+
+}
+
+local leftWallPhysParams = { friction=0.5, bounce=0.1 }
+
+local rightWallPhysParams = { friction=0.5, bounce=0.1 }
+
+local topWallPhysParams = { friction=0.5, bounce=0.1 }
+
+local botWallPhysParams = { friction=0.5, bounce=0.1 }
+
+local leftWall = display.newRect( xDisplay * .001, yDisplay , xDisplay * .0001, yDisplay * 2 )
+leftWall.strokeWidth = 0
+--leftWall:setStrokeColor( gray )
+
+local botWall = display.newRect( xDisplay * .001, yDisplay * .95, xDisplay * 2, yDisplay * .001)
+botWall.strokeWidth = 0
+-- botWall:setStrokeColor( gray )
+
+local rightWall = display.newRect( xDisplay * .999, yDisplay, xDisplay * .0001, yDisplay * 2)
+rightWall.strokeWidth = 0
+-- rightWall:setStrokeColor( gray )
+
+local topWall = display.newRect( xDisplay * .001, yDisplay * .15 , xDisplay * 2, yDisplay * .001)
+topWall.strokeWidth = 0
+-- topWall:setStrokeColor( gray )
 
 
-local vXGrav = display.newText( vXGravOptions )
-local vYGrav = display.newText( vYGravOptions )
-local vZGrav = display.newText( vZGravOptions )
-
-local vXGyro = display.newText( vXGyroOptions )
-local vYGyro = display.newText( vYGyroOptions )
-local vZGyro = display.newText( vZGyroOptions )
 --
--- define local functions here
+--local functions
 --
 
 local function onAccelerate( event )
     print( event.name, event.xGravity, event.yGravity, event.zGravity )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
-    local vZPrefix = "zGravety: "
 
+    local gravMulti = 10
 
+    local vXForce =  math.round(event.xGravity * gravMulti)
+    local vYForce = math.round(event.yGravity * gravMulti) * - 1
 
-    vYGrav.text = vXPrefix .. event.yGravity
-    vXGrav.text = vYPrefix .. event.xGravity
-    vZGrav.text = vZPrefix .. event.zGravity
+    vYGrav.text = vXPrefix .. vYForce
+    vXGrav.text = vYPrefix .. vXForce
 
-end
-
-local function onGyro( event )
-
-    local vGyroPrefixX = "XGyro: "
-    local vGyroPrefixY = "YGyro: "
-    local vGyroPrefixZ = "ZGyro: "
-
-    vXGyro.text = vGyroPrefixX .. event.xRotation
-    vYGyro.text = vGyroPrefixY .. event.yRotation
-    vZGyro.text = vGyroPrefixZ .. event.zRotation
+    meatBall:applyForce( vXForce, vYForce)
 
 end
 
@@ -111,7 +124,13 @@ function scene:create( event )
     --
     -- create your objects here
     --
-    
+    physics.addBody( meatBall, meatBallPhysParams )
+    meatBall.gravityScale = 0
+
+    physics.addBody( leftWall, "static", leftWallPhysParams )
+    physics.addBody( rightWall, "static", rightWallPhysParams )
+    physics.addBody( botWall, "static", botWallPhysParams )
+    physics.addBody( topWall, "static", topWallPhysParams )
     --
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
@@ -122,6 +141,18 @@ function scene:create( event )
     -- Insert it into the scene to be managed by Composer
     --
     sceneGroup:insert(background)
+
+    vXGrav = display.newText( vXGravOptions )
+    vYGrav = display.newText( vYGravOptions )
+
+    sceneGroup:insert(vXGrav)
+    sceneGroup:insert(vYGrav)
+    sceneGroup:insert( meatBall )
+    sceneGroup:insert( leftWall )
+    sceneGroup:insert( rightWall )
+    sceneGroup:insert( topWall )
+    sceneGroup:insert( botWall )
+
 
     --
     -- levelText is going to be accessed from the scene:show function. It cannot be local to
@@ -149,22 +180,6 @@ function scene:create( event )
     -- going between scenes (as well as demo widget.newButton)
     --
 
-    local iWin = widget.newButton({
-        label = "I Win!",
-        onEvent = handleWin
-    })
-    sceneGroup:insert(iWin)
-    iWin.x = display.contentCenterX - 100
-    iWin.y = display.contentHeight - 60
-
-    local iLoose = widget.newButton({
-        label = "I Loose!",
-        onEvent = handleLoss
-    })
-    sceneGroup:insert(iLoose)
-    iLoose.x = display.contentCenterX + 100
-    iLoose.y = display.contentHeight - 60
-
 end
 
 --
@@ -186,7 +201,7 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
-        -- physics.start()
+         physics.start()
         -- transition.to( levelText, { time = 500, alpha = 0 } )
         -- spawnTimer = timer.performWithDelay( 500, spawnEnemies )
 
@@ -215,6 +230,10 @@ function scene:hide( event )
         -- Remove enterFrame listeners here
         -- stop timers, phsics, any audio playing
         --
+
+        --check if this run time listener exits on back butotn press!!!
+        Runtime:removeEventListener( "accelerometer", onAccelerate )
+
         physics.stop()
     end
 
@@ -240,8 +259,5 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-if system.hasEventSource( "gyroscope" ) then
-    Runtime:addEventListener( "gyroscope", onGyro )
-end
 Runtime:addEventListener( "accelerometer", onAccelerate )
 return scene

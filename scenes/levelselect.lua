@@ -49,8 +49,8 @@ function scene:create( event )
 
     --local x = 90
     --local y = 115
-    local x = 0
-    local y = 0
+    local x = display.contentWidth * .001
+    local y = display.contentHeight * .05
     local buttons = {}
     local buttonBackgrounds = {}
     local buttonGroups = {}

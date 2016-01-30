@@ -59,52 +59,34 @@ function scene:create( event )
     title:setFillColor( 0 )
     sceneGroup:insert( title )
 
+    local dispHeight = display.contentHeight
+    local dispWidth = display.contentWidth
+
+    local buttonWidth = dispWidth
+    local buttonHeight = dispHeight * .15
+
     -- Create the widget
     local playButton = widget.newButton({
         id = "button1",
         label = "Play",
-        width = 100,
-        height = 32,
+        width = buttonWidth,
+        height = buttonHeight,
         onEvent = handlePlayButtonEvent
     })
-    playButton.x = display.contentCenterX
-    playButton.y = display.contentCenterY - 90
+    playButton.x = dispWidth / 2
+    playButton.y = dispHeight * .3
     sceneGroup:insert( playButton )
-
-    -- Create the widget
-    local settingsButton = widget.newButton({
-        id = "button2",
-        label = "Settings",
-        width = 100,
-        height = 32,
-        onEvent = handleSettingsButtonEvent
-    })
-    settingsButton.x = display.contentCenterX
-    settingsButton.y = display.contentCenterY - 30
-    sceneGroup:insert( settingsButton )
-
-    -- Create the widget
-    local helpButton = widget.newButton({
-        id = "button3",
-        label = "Help",
-        width = 100,
-        height = 32,
-        onEvent = handleHelpButtonEvent
-    })
-    helpButton.x = display.contentCenterX
-    helpButton.y = display.contentCenterY + 30
-    sceneGroup:insert( helpButton )
 
     -- Create the widget
     local creditsButton = widget.newButton({
         id = "button4",
         label = "Credits",
-        width = 100,
-        height = 32,
+        width = buttonWidth,
+        height = buttonHeight,
         onEvent = handleCreditsButtonEvent
     })
-    creditsButton.x = display.contentCenterX
-    creditsButton.y = display.contentCenterY + 90
+    creditsButton.x = dispWidth / 2
+    creditsButton.y = dispHeight * .3 + buttonHeight
     sceneGroup:insert( creditsButton )
 
 end
