@@ -12,11 +12,57 @@ local myData = require( "scripts.mydata" )
 -- 
 -- define local variables here
 --
+local xDisplay = display.contentWidth
+local yDisplay = display.contentHeight
 local currentScore          -- used to hold the numeric value of the current score
 local currentScoreDisplay   -- will be a display.newText() that draws the score on the screen
+local vXGravOptions = { text = "xGrav: ", x = xDisplay * .50, y = yDisplay * .1, fontSize = 42, font = native.systemFontBold, align = "center"}
+local vYGravOptions = { text = "yGrav: ", x = xDisplay * .50, y = yDisplay * .2,fontSize = 42, font = native.systemFontBold, align = "center"}
+local vZGravOptions = { text = "zGrav: ", x = xDisplay * .50, y = yDisplay * .3,fontSize = 42, font = native.systemFontBold, align = "center"}
+
+local vXGyroOptions = { text = "xGyro: ", x = xDisplay * .50, y = yDisplay * .5,fontSize = 42, font = native.systemFontBold, align = "center"}
+local vYGyroOptions = { text = "yGyro: ", x = xDisplay * .50, y = yDisplay * .6,fontSize = 42, font = native.systemFontBold, align = "center"}
+local vZGyroOptions = { text = "zGyro: ", x = xDisplay * .50, y = yDisplay * .7,fontSize = 42, font = native.systemFontBold, align = "center"}
+
+
+local vXGrav = display.newText( vXGravOptions )
+local vYGrav = display.newText( vYGravOptions )
+local vZGrav = display.newText( vZGravOptions )
+
+local vXGyro = display.newText( vXGyroOptions )
+local vYGyro = display.newText( vYGyroOptions )
+local vZGyro = display.newText( vZGyroOptions )
 --
 -- define local functions here
 --
+
+local function onAccelerate( event )
+    print( event.name, event.xGravity, event.yGravity, event.zGravity )
+    local vXPrefix = "xGravety: "
+    local vYPrefix = "yGravety: "
+    local vZPrefix = "zGravety: "
+
+
+
+    vYGrav.text = vXPrefix .. event.yGravity
+    vXGrav.text = vYPrefix .. event.xGravity
+    vZGrav.text = vZPrefix .. event.zGravity
+
+end
+
+local function onGyro( event )
+
+    local vGyroPrefixX = "XGyro: "
+    local vGyroPrefixY = "YGyro: "
+    local vGyroPrefixZ = "ZGyro: "
+
+    vXGyro.text = vGyroPrefixX .. event.xRotation
+    vYGyro.text = vGyroPrefixY .. event.yRotation
+    vZGyro.text = vGyroPrefixZ .. event.zRotation
+
+end
+
+
 local function handleWin( event )
     --
     -- When you tap the "I Win" button, reset the "scenes.nextlevel" scene, then goto it.
@@ -81,10 +127,11 @@ function scene:create( event )
     -- levelText is going to be accessed from the scene:show function. It cannot be local to
     -- scene:create(). This is why it was declared at the top of the module so it can be seen 
     -- everywhere in this module
-    levelText = display.newText(myData.settings.currentLevel, 0, 0, native.systemFontBold, 48 )
+    levelText = display.newText("", 0, 0, native.systemFontBold, 48 )
     levelText:setFillColor( 0 )
     levelText.x = display.contentCenterX
     levelText.y = display.contentCenterY
+
     --
     -- Insert it into the scene to be managed by Composer
     --
@@ -139,9 +186,10 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
-        physics.start()
-        transition.to( levelText, { time = 500, alpha = 0 } )
-        spawnTimer = timer.performWithDelay( 500, spawnEnemies )
+        -- physics.start()
+        -- transition.to( levelText, { time = 500, alpha = 0 } )
+        -- spawnTimer = timer.performWithDelay( 500, spawnEnemies )
+
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
@@ -150,6 +198,8 @@ function scene:show( event )
         currentScore = 0
         currentScoreDisplay.text = string.format( "%06d", currentScore )
     end
+
+    
 end
 
 --
@@ -190,4 +240,8 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+if system.hasEventSource( "gyroscope" ) then
+    Runtime:addEventListener( "gyroscope", onGyro )
+end
+Runtime:addEventListener( "accelerometer", onAccelerate )
 return scene
