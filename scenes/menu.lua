@@ -1,6 +1,5 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
 local widget = require( "widget" )
 local utility = require( "scripts.utility" )
 local ads = require( "ads" )
@@ -8,6 +7,10 @@ local ads = require( "ads" )
 local params
 
 local myData = require( "scripts.mydata" )
+
+local xDisplay = display.contentWidth
+local yDisplay = display.contentHeight
+
 
 local function handlePlayButtonEvent( event )
     if ( "ended" == event.phase ) then
@@ -48,22 +51,22 @@ function scene:create( event )
     -- setup a page background, really not that important though composer
     -- crashes out if there isn't a display object in the view.
     --
+    --[[
     local background = display.newRect( 0, 0, 570, 360 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     sceneGroup:insert( background )
+    --]]
 
-    local title = display.newText("Game Title", 100, 32, native.systemFontBold, 32 )
-    title.x = display.contentCenterX
-    title.y = 40
+    local title = display.newText("Game Title", xDisplay * .5 , yDisplay * .05, native.systemFontBold, yDisplay * .05 )
     title:setFillColor( 0 )
     sceneGroup:insert( title )
 
-    local dispHeight = display.contentHeight
-    local dispWidth = display.contentWidth
+    local yDisplay = display.contentHeight
+    local xDisplay = display.contentWidth
 
-    local buttonWidth = dispWidth
-    local buttonHeight = dispHeight * .15
+    local buttonWidth = xDisplay
+    local buttonHeight = yDisplay * .15
 
     -- Create the widget
     local playButton = widget.newButton({
@@ -71,10 +74,11 @@ function scene:create( event )
         label = "Play",
         width = buttonWidth,
         height = buttonHeight,
-        onEvent = handlePlayButtonEvent
+        onEvent = handlePlayButtonEvent,
+        fontSize = yDisplay * .1
     })
-    playButton.x = dispWidth / 2
-    playButton.y = dispHeight * .3
+    playButton.x = xDisplay / 2
+    playButton.y = yDisplay * .3
     sceneGroup:insert( playButton )
 
     -- Create the widget
@@ -83,10 +87,11 @@ function scene:create( event )
         label = "Credits",
         width = buttonWidth,
         height = buttonHeight,
-        onEvent = handleCreditsButtonEvent
+        onEvent = handleCreditsButtonEvent,
+        fontSize = yDisplay * .1
     })
-    creditsButton.x = dispWidth / 2
-    creditsButton.y = dispHeight * .3 + buttonHeight
+    creditsButton.x = xDisplay / 2
+    creditsButton.y = yDisplay * .3 + buttonHeight
     sceneGroup:insert( creditsButton )
 
 end

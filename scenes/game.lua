@@ -13,12 +13,13 @@ local math = require( "math")
 -- 
 --local variables
 --
+
 local xDisplay = display.contentWidth
 local yDisplay = display.contentHeight
-local vXGravOptions = { text = "xGrav: ", x = xDisplay * .15, y = yDisplay * .05, fontSize = 12, font = native.systemFontBold, align = "left"}
-local vYGravOptions = { text = "yGrav: ", x = xDisplay * .15, y = yDisplay * .075,fontSize = 12, font = native.systemFontBold, align = "left"}
+local vXGravOptions = { text = "xGrav: ", x = xDisplay * .15, y = yDisplay * .05, fontSize = yDisplay * 0.05, font = native.systemFontBold, align = "left"}
+local vYGravOptions = { text = "yGrav: ", x = xDisplay * .15, y = yDisplay * .1,fontSize = yDisplay * 0.05, font = native.systemFontBold, align = "left"}
 
-local meatBall = display.newCircle( xDisplay / 2, yDisplay / 2, xDisplay * .05 )
+local meatBall = display.newImage( "meatball.png", xDisplay * .51, yDisplay * .2 )
 
 local meatBallPhysParams = {
 
@@ -39,19 +40,58 @@ local botWallPhysParams = { friction=0.5, bounce=0.1 }
 
 local leftWall = display.newRect( xDisplay * .001, yDisplay , xDisplay * .0001, yDisplay * 2 )
 leftWall.strokeWidth = 0
+leftWall.alpha = 0;
 --leftWall:setStrokeColor( gray )
 
 local botWall = display.newRect( xDisplay * .001, yDisplay * .95, xDisplay * 2, yDisplay * .001)
 botWall.strokeWidth = 0
+botWall.alpha = 0;
 -- botWall:setStrokeColor( gray )
 
 local rightWall = display.newRect( xDisplay * .999, yDisplay, xDisplay * .0001, yDisplay * 2)
 rightWall.strokeWidth = 0
+rightWall.alpha = 0;
 -- rightWall:setStrokeColor( gray )
 
 local topWall = display.newRect( xDisplay * .001, yDisplay * .15 , xDisplay * 2, yDisplay * .001)
 topWall.strokeWidth = 0
+topWall.alpha = 0;
 -- topWall:setStrokeColor( gray )
+
+local toWin = 3
+
+local YBoxLoc = yDisplay * .71
+
+local lev1Box1Up = display.newImage( "inactiveTile.png")
+lev1Box1Up.x = xDisplay * .51
+lev1Box1Up.y = yDisplay * .41
+local lev1Box1NotFlipped = 1
+
+local lev1Box1Down = display.newImage( "activeTile.png" )
+lev1Box1Down.x = lev1Box1Up.x
+lev1Box1Down.y = lev1Box1Up.y
+lev1Box1Down.isVisible = false
+
+local lev1Box2Up = display.newImage( "inactiveTile.png")
+lev1Box2Up.x = xDisplay * .2
+lev1Box2Up.y = YBoxLoc
+local lev1Box2NotFlipped = 1
+
+local lev1Box2Down = display.newImage( "activeTile.png" )
+lev1Box2Down.x = lev1Box2Up.x
+lev1Box2Down.y = lev1Box2Up.y
+lev1Box2Down.isVisible = false
+
+
+local lev1Box3Up = display.newImage( "inactiveTile.png")
+lev1Box3Up.x = xDisplay * .81
+lev1Box3Up.y = YBoxLoc
+local lev1Box3NotFlipped = 1
+
+local lev1Box3Down = display.newImage( "activeTile.png" )
+lev1Box3Down.x = lev1Box3Up.x
+lev1Box3Down.y = lev1Box3Up.y
+lev1Box3Down.isVisible = false
 
 
 --
@@ -59,11 +99,10 @@ topWall.strokeWidth = 0
 --
 
 local function onAccelerate( event )
-    print( event.name, event.xGravity, event.yGravity, event.zGravity )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
 
-    local gravMulti = 5
+    local gravMulti = 100
 
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1
@@ -71,8 +110,52 @@ local function onAccelerate( event )
     vYGrav.text = vXPrefix .. vYForce
     vXGrav.text = vYPrefix .. vXForce
 
-    meatBall:applyForce( vXForce, vYForce)
+    meatBall:applyForce( vXForce, vYForce, meatBall.x, meatBall.y)
 
+end
+
+
+-- Circle-based collision detection
+local function hasCollidedCircle( obj1, obj2 )
+    if ( obj1 == nil ) then  -- Make sure the first object exists
+        return false
+    end
+    if ( obj2 == nil ) then  -- Make sure the other object exists
+        return false
+    end
+
+    local dx = obj1.x - obj2.x
+    local dy = obj1.y - obj2.y
+
+    local distance = math.sqrt( dx*dx + dy*dy )
+    local objectSize = (obj2.contentWidth/2) + (obj1.contentWidth/2)
+
+    if ( distance < objectSize ) then
+        return true
+    end
+    return false
+end
+
+local function checkCollision( event ) 
+
+    if hasCollidedCircle(lev1Box1Up, meatBall) and lev1Box1NotFlipped then
+        lev1Box1NotFlipped = 0
+        lev1Box1Up.isVisible = false
+        lev1Box1Down.isVisible = true
+    end
+
+
+    if hasCollidedCircle(lev1Box2Up, meatBall) and lev1Box2NotFlipped then
+        lev1Box2NotFlipped = 0
+        lev1Box2Up.isVisible = false
+        lev1Box2Down.isVisible = true
+    end
+
+    if hasCollidedCircle(lev1Box3Up, meatBall) and lev1Box3NotFlipped then
+        lev1Box3NotFlipped = 0
+        lev1Box3Up.isVisible = false
+        lev1Box3Down.isVisible = true
+    end
 end
 
 
@@ -135,8 +218,7 @@ function scene:create( event )
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local background = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
-    background:setFillColor( 0.6, 0.7, 0.3 )
+    local background = display.newImage( "firstLevel.png", xDisplay * .5, yDisplay * .5 , true)
     --
     -- Insert it into the scene to be managed by Composer
     --
@@ -152,6 +234,13 @@ function scene:create( event )
     sceneGroup:insert( rightWall )
     sceneGroup:insert( topWall )
     sceneGroup:insert( botWall )
+
+    sceneGroup:insert( lev1Box1Up )
+    sceneGroup:insert( lev1Box2Up )
+    sceneGroup:insert( lev1Box3Up )
+    sceneGroup:insert( lev1Box1Down )
+    sceneGroup:insert( lev1Box2Down )
+    sceneGroup:insert( lev1Box3Down )
 
 
     --
@@ -172,8 +261,8 @@ function scene:create( event )
     -- because we want to access this in multiple functions, we need to forward declare the variable and
     -- then create the object here in scene:create()
     --
-    currentScoreDisplay = display.newText("000000", display.contentWidth - 50, 10, native.systemFont, 16 )
-    sceneGroup:insert( currentScoreDisplay )
+    -- currentScoreDisplay = display.newText("000000", display.contentWidth - 50, 10, native.systemFont, 16 )
+    -- sceneGroup:insert( currentScoreDisplay )
 
     --
     -- these two buttons exist as a quick way to let you test
@@ -205,13 +294,14 @@ function scene:show( event )
         -- transition.to( levelText, { time = 500, alpha = 0 } )
         -- spawnTimer = timer.performWithDelay( 500, spawnEnemies )
 
+
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
-        currentScore = 0
-        currentScoreDisplay.text = string.format( "%06d", currentScore )
+        --currentScore = 0
+        -- currentScoreDisplay.text = string.format( "%06d", currentScore )
     end
 
     
@@ -233,6 +323,7 @@ function scene:hide( event )
 
         --check if this run time listener exits on back butotn press!!!
         Runtime:removeEventListener( "accelerometer", onAccelerate )
+        Runtime:removeEventListener( "accelerometer", checkCollision )
 
         physics.stop()
     end
@@ -260,4 +351,5 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 Runtime:addEventListener( "accelerometer", onAccelerate )
+Runtime:addEventListener( "accelerometer", checkCollision )
 return scene
