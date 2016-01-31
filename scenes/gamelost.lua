@@ -17,6 +17,8 @@ local flyingMoster = display.newImage( "sadMonster.png" )
 flyingMoster.x = xDisplay * .5
 flyingMoster.y = yDisplay * .25
 
+audio.stop( 1 )
+
 local loseSound = myData.loseSound
 
 audio.play( loseSound )
@@ -38,6 +40,19 @@ local function handleButtonEvent( event )
     return true
 end
 
+local function onAccelerate( event )
+
+    local gravMulti = myData.gravMulti / 2
+
+    local vXForce =  math.round(event.xGravity * gravMulti)
+    local vYForce = math.round(event.yGravity * gravMulti) * - 1
+
+    --vYGrav.text = vXPrefix .. vYForce
+    --vXGrav.text = vYPrefix .. vXForce
+
+    flyingMoster:applyForce( vXForce, vYForce, flyingMoster.x, flyingMoster.y)
+end
+
 --
 -- Start the composer event handlers
 --
@@ -45,6 +60,17 @@ function scene:create( event )
     local sceneGroup = self.view
 
     params = event.params
+
+    physics.start( )
+
+    flyingMoster.isVisible = false
+
+    flyingMoster.isVisible = true
+
+    physics.addBody( flyingMoster, "dynamic" )
+    flyingMoster.gravityScale = 0
+
+    sceneGroup:insert( flyingMoster )
         
     local gameOverText = display.newText("Game Over", 0, 0, native.systemFontBold, 32 )
     gameOverText:setFillColor( 0 )
@@ -75,22 +101,13 @@ function scene:show( event )
 
     if event.phase == "did" then
 
-        flyingMoster.isVisible = false
-
-        flyingMoster.isVisible = true
-
-        physics.addBody( flyingMoster, "dynamic" )
-        flyingMoster.gravityScale = .15
-
-        sceneGroup:insert( flyingMoster )
-
-
-        flyingMoster:applyForce(0, 100, flyingMoster.x, flyingMoster.y)
     end
 end
 
 function scene:hide( event )
     local sceneGroup = self.view
+
+    Runtime:removeEventListener( "accelerometer", onAccelerate )
     
     if event.phase == "will" then
         physics.stop( )
@@ -111,4 +128,5 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+Runtime:addEventListener( "accelerometer", onAccelerate )
 return scene

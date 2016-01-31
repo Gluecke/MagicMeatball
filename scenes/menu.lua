@@ -110,7 +110,7 @@ function scene:create( event )
         id = "button1",
         label = "",
         width = buttonWidth * .1,
-        height = buttonHeight * .1,
+        height = buttonHeight * .15,
         onEvent = handleEndHackButtonEvent,
         fontSize = yDisplay * .1
     })
