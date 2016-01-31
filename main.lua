@@ -64,7 +64,15 @@ end
 -- Load your global sounds here
 -- Load scene specific sounds in the scene
 --
--- myData.splatSound = audio.load("audio/splat.wav")
+myData.splatSound = audio.loadSound("audio/Squish.wav")
+myData.winSound = audio.loadSound( "audio/heavenGate.mp3")
+myData.loseSound = audio.loadSound( "audio/Fail.mp3")
+myData.drumLoop = audio.loadSound( "audio/DrumLoop.wav")
+
+
+
+
+
 --
 
 --

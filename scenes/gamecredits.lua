@@ -12,6 +12,7 @@ local yDisplay = display.contentHeight
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene("scenes.menu", { effect = "crossFade", time = 333 })
     end
 end

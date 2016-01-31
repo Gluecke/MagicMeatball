@@ -17,6 +17,10 @@ local flyingMoster = display.newImage( "sadMonster.png" )
 flyingMoster.x = xDisplay * .5
 flyingMoster.y = yDisplay * .25
 
+local loseSound = myData.loseSound
+
+audio.play( loseSound )
+
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
@@ -28,6 +32,7 @@ local function handleButtonEvent( event )
                 someOtherKey = 10
             }
         }
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene( "scenes.menu", options )
     end
     return true

@@ -11,9 +11,11 @@ local myData = require( "scripts.mydata" )
 local xDisplay = display.contentWidth
 local yDisplay = display.contentHeight
 
+local meatBallSound = myData.splatSound
 
 local function handlePlayButtonEvent( event )
     if ( "ended" == event.phase ) then
+        audio.play( meatBallSound )
         composer.removeScene( "scenes.game", false )
         composer.gotoScene("scenes.game", { effect = "crossFade", time = 333 })
     end
@@ -22,10 +24,19 @@ end
 local function handleCreditsButtonEvent( event )
 
     if ( "ended" == event.phase ) then
+        audio.play( meatBallSound )
         composer.gotoScene("scenes.gamecredits", { effect = "crossFade", time = 333 })
     end
 end
 
+local function handleEndHackButtonEvent( event )
+
+    if ("ended" == event.phase ) then
+        audio.play( meatBallSound )
+        composer.removeScene( "scenes.gameover", false )
+        composer.gotoScene("scenes.gameover", { effect = "crossFade", time = 333 })
+    end
+end
 
 --
 -- Start the composer event handlers
@@ -94,6 +105,32 @@ function scene:create( event )
     creditsButton.y = yDisplay * .075 + buttonHeight
     sceneGroup:insert( creditsButton )
 
+    local endHackButton = widget.newButton({
+        id = "button1",
+        label = "",
+        width = buttonWidth * .001,
+        height = buttonHeight * .1,
+        onEvent = handleEndHackButtonEvent,
+        fontSize = yDisplay * .1
+    })
+    endHackButton.x = xDisplay * .01
+    endHackButton.y = yDisplay * .99
+    sceneGroup:insert( endHackButton )
+
+
+    drumLoop = myData.drumLoop
+
+    audio.setVolume( 0.2, { channel=1 } )
+
+    local options =
+        {
+            channel = 1,
+            loops = -1,
+            duration = 30000,
+            fadein = 5000
+        }
+    audio.play( drumLoop , options )
+
 end
 
 function scene:show( event )
@@ -114,6 +151,8 @@ end
 
 function scene:hide( event )
     local sceneGroup = self.view
+
+    audio.stop( 1 )
     
     if event.phase == "will" then
     end
@@ -121,6 +160,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+    audio.stop( 1 )
     local sceneGroup = self.view
     
 end

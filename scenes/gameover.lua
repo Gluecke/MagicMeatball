@@ -8,6 +8,8 @@ local myData = require( "scripts.mydata" )
 local gameNetwork = require( "gameNetwork" )
 local device = require( "scripts.device" )
 
+local ads = require( "ads" )
+
 local params
 
 local xDisplay = display.contentWidth
@@ -16,6 +18,20 @@ local yDisplay = display.contentHeight
 local flyingMoster = display.newImage( "monster.png" )
 flyingMoster.x = xDisplay * .5
 flyingMoster.y = yDisplay * .25
+
+local winSound = myData.winSound
+
+audio.setVolume( 1, { channel=2 } )
+
+local options =
+    {
+        channel = 2,
+        loops = 0,
+        duration = 30000,
+        fadein = 5000
+    }
+
+audio.play(  winSound, options )
 
 local function handleButtonEvent( event )
 
@@ -28,6 +44,7 @@ local function handleButtonEvent( event )
                 someOtherKey = 10
             }
         }
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene( "scenes.menu", options )
     end
     return true
@@ -59,6 +76,7 @@ function scene:create( event )
         fontSize = yDisplay * .1
     })
     sceneGroup:insert( doneButton )
+
 end
 
 function scene:show( event )

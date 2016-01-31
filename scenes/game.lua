@@ -96,6 +96,8 @@ local secondsLeft = 18
 
 local clockText = display.newText("00:18", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
 
+local meatBallSound = myData.splatSound
+
 --
 --local functions
 --
@@ -189,6 +191,7 @@ local function checkCollision( event )
         lev1Box1NotFlipped = 0
         lev1Box1Up.isVisible = false
         lev1Box1Down.isVisible = true
+        audio.play( meatBallSound )
     end
 
 
@@ -196,12 +199,14 @@ local function checkCollision( event )
         lev1Box2NotFlipped = 0
         lev1Box2Up.isVisible = false
         lev1Box2Down.isVisible = true
+        audio.play( meatBallSound )
     end
 
     if hasCollidedCircle(lev1Box3Up, meatBall) and lev1Box3NotFlipped then
         lev1Box3NotFlipped = 0
         lev1Box3Up.isVisible = false
         lev1Box3Down.isVisible = true
+        audio.play( meatBallSound )
     end
 
     if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 then
