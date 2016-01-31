@@ -13,9 +13,19 @@ local yDisplay = display.contentHeight
 
 local meatBallSound = myData.splatSound
 
+local buttonOptions =
+    {
+        channel = 3,
+        loops = 0,
+        duration = 30000,
+        fadein = 0
+    }
+audio.setVolume( 0.1, { channel=3 } )
+
+
 local function handlePlayButtonEvent( event )
     if ( "ended" == event.phase ) then
-        audio.play( meatBallSound )
+        audio.play( meatBallSound, buttonOptions )
         composer.removeScene( "scenes.game", false )
         composer.gotoScene("scenes.game", { effect = "crossFade", time = 333 })
     end
@@ -24,7 +34,7 @@ end
 local function handleCreditsButtonEvent( event )
 
     if ( "ended" == event.phase ) then
-        audio.play( meatBallSound )
+        audio.play( meatBallSound, buttonOptions )
         composer.removeScene( "scenes.gamecredits", false )
         composer.gotoScene("scenes.gamecredits", { effect = "crossFade", time = 333 })
     end
@@ -33,7 +43,7 @@ end
 local function handleEndHackButtonEvent( event )
 
     if ("ended" == event.phase ) then
-        audio.play( meatBallSound )
+        audio.play( meatBallSound, buttonOptions)
         composer.removeScene( "scenes.gameover", false )
         composer.gotoScene("scenes.gameover", { effect = "crossFade", time = 333 })
     end

@@ -163,6 +163,9 @@ local function wonGame()
                 someOtherKey = 10
             }
         }
+    audio.stop( 1 )
+    audio.stop( 2 )
+    audio.stop( 3 )
     composer.removeScene( "scenes.gameover", false )
     composer.gotoScene( "scenes.gameover", options )
 

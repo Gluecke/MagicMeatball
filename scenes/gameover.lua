@@ -73,13 +73,14 @@ function scene:create( event )
 
     local doneButton = widget.newButton({
         id = "button1",
-        label = "You WIN!!",
+        label = "ALL HAIL!",
         width = xDisplay,
         height = yDisplay * .15,
         onEvent = handleButtonEvent,
         x = xDisplay * .5,
         y = yDisplay * .85,
-        fontSize = yDisplay * .1
+        fontSize = yDisplay * .1,
+        font = "NoodleScript"
     })
     sceneGroup:insert( doneButton )
 
@@ -87,16 +88,16 @@ function scene:create( event )
 
     audio.stop( 1 )
 
-    audio.setVolume( 1, { channel=2 } )
+    audio.setVolume( .5, { channel=2 } )
 
     local options =
         {
             channel = 2,
             duration = 30000,
-            fadein = 5000
+            fadein = 0
         }
 
-    audio.play(  winSound )
+    audio.play(  winSound, options )
 
 end
 

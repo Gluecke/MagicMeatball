@@ -87,7 +87,8 @@ function scene:create( event )
         onEvent = handleButtonEvent,
         x = xDisplay * .5,
         y = yDisplay * .85,
-        fontSize = yDisplay * .07
+        fontSize = yDisplay * .07,
+        font = "NoodleScript"
     })
     sceneGroup:insert( doneButton )
 end
