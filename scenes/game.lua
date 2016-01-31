@@ -125,8 +125,8 @@ local function onAccelerate( event )
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1
 
-    vYGrav.text = vXPrefix .. vYForce
-    vXGrav.text = vYPrefix .. vXForce
+    --vYGrav.text = vXPrefix .. vYForce
+    --vXGrav.text = vYPrefix .. vXForce
 
     meatBall:applyForce( vXForce, vYForce, meatBall.x, meatBall.y)
 
@@ -142,6 +142,7 @@ local function wonGame()
                 someOtherKey = 10
             }
         }
+    composer.removeScene( "scenes.game2", false )
     composer.gotoScene( "scenes.game2", options )
 
 end
@@ -253,11 +254,11 @@ function scene:create( event )
     --
     sceneGroup:insert(background)
 
-    vXGrav = display.newText( vXGravOptions )
-    vYGrav = display.newText( vYGravOptions )
+    --vXGrav = display.newText( vXGravOptions )
+    --vYGrav = display.newText( vYGravOptions )
 
-    sceneGroup:insert(vXGrav)
-    sceneGroup:insert(vYGrav)
+    --sceneGroup:insert(vXGrav)
+    --sceneGroup:insert(vYGrav)
     sceneGroup:insert( meatBall )
     sceneGroup:insert( leftWall )
     sceneGroup:insert( rightWall )
