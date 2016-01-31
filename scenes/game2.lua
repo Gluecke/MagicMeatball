@@ -92,9 +92,9 @@ lev1Box3Down.y = lev1Box3Up.y
 lev1Box3Down.isVisible = false
 
 -- Keep track of time in seconds
-local secondsLeft = 20   -- 20 minutes * 60 seconds
+local secondsLeft = 15   -- 20 minutes * 60 seconds
 
-local clockText = display.newText("00:20", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .08)
+local clockText = display.newText("00:15", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .08)
 
 --
 --local functions
@@ -142,7 +142,7 @@ local function wonGame()
                 someOtherKey = 10
             }
         }
-    composer.gotoScene( "scenes.game2", options )
+    composer.gotoScene( "scenes.gameover", options )
 
 end
 
@@ -263,7 +263,6 @@ function scene:create( event )
     sceneGroup:insert( rightWall )
     sceneGroup:insert( topWall )
     sceneGroup:insert( botWall )
-    sceneGroup:insert(clockText)
 
     sceneGroup:insert( lev1Box1Up )
     sceneGroup:insert( lev1Box2Up )

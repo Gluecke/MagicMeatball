@@ -35,6 +35,9 @@ function scene:create( event )
 
     params = event.params
 
+    local backBackground = display.newRect( xDisplay * .5, yDisplay * .5 , xDisplay, yDisplay )
+    sceneGroup:insert( backBackground )
+
     local txtButtonSize = yDisplay * .1
         
     --
@@ -43,7 +46,7 @@ function scene:create( event )
     --
 
     local selectLevelText = display.newText("Select a level", yDisplay * .2, xDisplay * .5, native.systemFontBold, txtButtonSize * .5)
-    selectLevelText:setFillColor( 1 )
+    selectLevelText:setFillColor( black )
     selectLevelText.x = display.contentCenterX
     selectLevelText.y = 50
     sceneGroup:insert(selectLevelText)
@@ -80,7 +83,7 @@ function scene:create( event )
         buttons[i].y = y
         buttonGroups[i]:insert(buttons[i])
 
-        x = x + 55
+        x = x + xDisplay * .25
         cnt = cnt + 1
         if cnt > 5 then
             cnt = 1

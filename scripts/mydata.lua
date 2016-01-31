@@ -1,5 +1,5 @@
 M = {}
-M.maxLevels = 1
+M.maxLevels = 2
 M.levelScore = 0
 M.products = {}
 M.settings = {}

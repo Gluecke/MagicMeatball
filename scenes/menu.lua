@@ -14,14 +14,8 @@ local yDisplay = display.contentHeight
 
 local function handlePlayButtonEvent( event )
     if ( "ended" == event.phase ) then
-        composer.removeScene( "scenes.levelselect", false )
-        composer.gotoScene("scenes.levelselect", { effect = "crossFade", time = 333 })
-    end
-end
-
-local function handleHelpButtonEvent( event )
-    if ( "ended" == event.phase ) then
-        composer.gotoScene("scenes.help", { effect = "crossFade", time = 333, isModal = true })
+        composer.removeScene( "scenes.game", false )
+        composer.gotoScene("scenes.game", { effect = "crossFade", time = 333 })
     end
 end
 
@@ -32,12 +26,6 @@ local function handleCreditsButtonEvent( event )
     end
 end
 
-local function handleSettingsButtonEvent( event )
-
-    if ( "ended" == event.phase ) then
-        composer.gotoScene("scenes.gamesettings", { effect = "crossFade", time = 333 })
-    end
-end
 
 --
 -- Start the composer event handlers
@@ -58,7 +46,15 @@ function scene:create( event )
     sceneGroup:insert( background )
     --]]
 
-    local title = display.newText("Game Title", xDisplay * .5 , yDisplay * .05, native.systemFontBold, yDisplay * .05 )
+    local backBackground = display.newRect( xDisplay * .5, yDisplay * .5 , xDisplay, yDisplay )
+    sceneGroup:insert( backBackground )
+
+    local background = display.newImage( "menuScreen.png", xDisplay * .5, yDisplay * .5 , true)
+    background.height = yDisplay * 1
+
+    sceneGroup:insert( background )
+
+    local title = display.newText("", xDisplay * .5 , yDisplay * .05, native.systemFontBold, yDisplay * .05 )
     title:setFillColor( 0 )
     sceneGroup:insert( title )
 
@@ -71,27 +67,31 @@ function scene:create( event )
     -- Create the widget
     local playButton = widget.newButton({
         id = "button1",
-        label = "Play",
+        label = "",
         width = buttonWidth,
         height = buttonHeight,
         onEvent = handlePlayButtonEvent,
-        fontSize = yDisplay * .1
+        fontSize = yDisplay * .1,
+        defaultFile = "playButton.png",
+        overFile = "playButton.png"
     })
-    playButton.x = xDisplay / 2
-    playButton.y = yDisplay * .3
+    playButton.x = xDisplay * .5
+    playButton.y = yDisplay * .075
     sceneGroup:insert( playButton )
 
     -- Create the widget
     local creditsButton = widget.newButton({
         id = "button4",
-        label = "Credits",
+        label = "",
         width = buttonWidth,
         height = buttonHeight,
         onEvent = handleCreditsButtonEvent,
-        fontSize = yDisplay * .1
+        fontSize = yDisplay * .1,
+        defaultFile = "creditButton.png",
+        overFile = "creditButton.png"
     })
     creditsButton.x = xDisplay / 2
-    creditsButton.y = yDisplay * .3 + buttonHeight
+    creditsButton.y = yDisplay * .075 + buttonHeight
     sceneGroup:insert( creditsButton )
 
 end
