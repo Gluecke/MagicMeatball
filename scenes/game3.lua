@@ -150,8 +150,8 @@ local function wonGame()
                 someOtherKey = 10
             }
         }
-    composer.removeScene( "scenes.game3", false )
-    composer.gotoScene( "scenes.game3", options )
+    composer.removeScene( "scenes.gameover", false )
+    composer.gotoScene( "scenes.gameover", options )
 
 end
 
