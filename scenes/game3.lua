@@ -99,6 +99,17 @@ lev1Box4Down.x = lev1Box4Up.x
 lev1Box4Down.y = lev1Box4Up.y
 lev1Box4Down.isVisible = false
 
+local lev1Box5Up = display.newImage( "inactiveTile.png")
+lev1Box5Up.x = xDisplay * .84
+lev1Box5Up.y = yDisplay * .39
+local lev1Box5NotFlipped = 1
+
+local lev1Box5Down = display.newImage( "activeTile.png" )
+lev1Box5Down.x = lev1Box5Up.x
+lev1Box5Down.y = lev1Box5Up.y
+lev1Box5Down.isVisible = false
+
+
 -- Keep track of time in seconds
 local secondsLeft = 15
 
@@ -219,7 +230,13 @@ local function checkCollision( event )
         lev1Box4Down.isVisible = true
     end
 
-    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped then
+    if hasCollidedCircle(lev1Box5Up, meatBall) and lev1Box5NotFlipped then
+        lev1Box5NotFlipped = 0
+        lev1Box5Up.isVisible = false
+        lev1Box5Down.isVisible = true
+    end
+
+    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped  and lev1Box5NotFlipped == 0 then
         wonGame()
     end
 
@@ -280,7 +297,7 @@ function scene:create( event )
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local background = display.newImage( "secondLevel.png", xDisplay * .5, yDisplay * .5 , true)
+    local background = display.newImage( "thirdLevel.png", xDisplay * .5, yDisplay * .5 , true)
     --
     -- Insert it into the scene to be managed by Composer
     --
@@ -305,6 +322,8 @@ function scene:create( event )
     sceneGroup:insert( lev1Box3Down )
     sceneGroup:insert( lev1Box4Up )
     sceneGroup:insert ( lev1Box4Down )
+    sceneGroup:insert( lev1Box5Up )
+    sceneGroup:insert( lev1Box5Down )
 
 
     --
