@@ -92,9 +92,9 @@ lev1Box3Down.y = lev1Box3Up.y
 lev1Box3Down.isVisible = false
 
 -- Keep track of time in seconds
-local secondsLeft = 20   -- 20 minutes * 60 seconds
+local secondsLeft = 20
 
-local clockText = display.newText("00:20", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .08)
+local clockText = display.newText("00:20", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
 
 --
 --local functions
@@ -147,6 +147,21 @@ local function wonGame()
 
 end
 
+local function lostGame()
+
+    local options = {
+                effect = "crossFade",
+                time = 500,
+                params = {
+                    someKey = "someValue",
+                    someOtherKey = 10
+                }
+            }
+    composer.removeScene( "scenes.gamelost", false )
+    composer.gotoScene( "scenes.gamelost", options )
+
+end
+
 -- Circle-based collision detection
 local function hasCollidedCircle( obj1, obj2 )
     if ( obj1 == nil ) then  -- Make sure the first object exists
@@ -190,11 +205,12 @@ local function checkCollision( event )
     end
 
     if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 then
-
         wonGame()
-
     end
 
+    if secondsLeft <= 0 then
+        lostGame()
+    end
 
 end
 

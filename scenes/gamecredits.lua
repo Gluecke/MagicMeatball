@@ -34,33 +34,36 @@ function scene:create( event )
 
     local title = display.newText( "Magic Meatball", 100, 32, native.systemFontBold, yDisplay * .05)
     title.x = display.contentCenterX
-    title.y = display.contentHeight * .25
+    title.y = display.contentHeight * .15
     title:setFillColor( 0 )
     sceneGroup:insert( title )
 
     local creditText = display.newText( "A game by:", 250, 250, native.systemFont,  yDisplay * .05 )
     creditText:setFillColor( 0 )
     creditText.x = display.contentCenterX
-    creditText.y = display.contentHeight * .50
+    creditText.y = display.contentHeight * .35
     sceneGroup:insert(creditText)
 
     local creditText = display.newText( "Natasha Matthews and", 250, 250, native.systemFont,  yDisplay * .05 )
     creditText:setFillColor( 0 )
     creditText.x = display.contentCenterX
-    creditText.y = display.contentHeight * .55
+    creditText.y = display.contentHeight * .45
     sceneGroup:insert(creditText)
 
     local creditText = display.newText( "Garrett Luecke", 250, 250, native.systemFont,  yDisplay * .05 )
     creditText:setFillColor( 0 )
     creditText.x = display.contentCenterX
-    creditText.y = display.contentHeight * .60
+    creditText.y = display.contentHeight * .55
     sceneGroup:insert(creditText)
 
-    local stlText = display.newText( "Made in STL", 250, 250, native.systemFont,  yDisplay * .05 )
-    stlText:setFillColor( 0 )
-    stlText.x = display.contentCenterX
-    stlText.y = display.contentHeight * .75
-    sceneGroup:insert(stlText)
+    -- local stlText = display.newText( "Made in STL", 250, 250, native.systemFont,  yDisplay * .05 )
+    -- stlText:setFillColor( 0 )
+    -- stlText.x = display.contentCenterX
+    -- stlText.y = display.contentHeight * .65
+    -- sceneGroup:insert(stlText)
+
+    local stlLogo = display.newImage( "ggj2016_logo.png", xDisplay * .5, yDisplay * .7 )
+    sceneGroup:insert( stlLogo )
 
     -- http://www.freesfx.co.uk
     -- http://www.freesound.org
