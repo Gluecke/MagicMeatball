@@ -88,6 +88,7 @@ local function onKeyEvent( event )
         if ( composer.getCurrentSceneName() == "scenes.menu" ) then
             native.requestExit()
         else
+            composer.removeScene( "scenes.menu", false )
             composer.gotoScene( "scenes.menu", { effect="crossFade", time=500 } )
         end
         return true
@@ -120,6 +121,7 @@ local function systemEvents(event)
         --
         -- Go to the menu
         --
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene( "scenes.menu", { time = 250, effect = "fade" } )
     end
     return true

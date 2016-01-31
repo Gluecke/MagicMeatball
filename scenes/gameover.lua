@@ -8,10 +8,6 @@ local myData = require( "scripts.mydata" )
 local gameNetwork = require( "gameNetwork" )
 local device = require( "scripts.device" )
 
-local ads = require( "ads" )
-
-local params
-
 local xDisplay = display.contentWidth
 local yDisplay = display.contentHeight
 

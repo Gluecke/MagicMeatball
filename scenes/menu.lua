@@ -25,6 +25,7 @@ local function handleCreditsButtonEvent( event )
 
     if ( "ended" == event.phase ) then
         audio.play( meatBallSound )
+        composer.removeScene( "scenes.gamecredits", false )
         composer.gotoScene("scenes.gamecredits", { effect = "crossFade", time = 333 })
     end
 end
@@ -108,7 +109,7 @@ function scene:create( event )
     local endHackButton = widget.newButton({
         id = "button1",
         label = "",
-        width = buttonWidth * .001,
+        width = buttonWidth * .1,
         height = buttonHeight * .1,
         onEvent = handleEndHackButtonEvent,
         fontSize = yDisplay * .1
