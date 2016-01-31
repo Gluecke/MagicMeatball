@@ -111,7 +111,7 @@ lev1Box5Down.isVisible = false
 
 
 -- Keep track of time in seconds
-local secondsLeft = 15
+local secondsLeft = 13
 
 local clockText = display.newText("00:15", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
 
