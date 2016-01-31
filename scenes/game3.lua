@@ -59,8 +59,8 @@ topWall.alpha = 0;
 -- topWall:setStrokeColor( gray )
 
 local lev1Box1Up = display.newImage( "inactiveTile.png")
-lev1Box1Up.x = xDisplay * .475
-lev1Box1Up.y = yDisplay * .468
+lev1Box1Up.x = xDisplay * .486
+lev1Box1Up.y = yDisplay * .42
 local lev1Box1NotFlipped = 1
 
 local lev1Box1Down = display.newImage( "activeTile.png" )
@@ -69,8 +69,8 @@ lev1Box1Down.y = lev1Box1Up.y
 lev1Box1Down.isVisible = false
 
 local lev1Box2Up = display.newImage( "inactiveTile.png")
-lev1Box2Up.x = xDisplay * .17
-lev1Box2Up.y = yDisplay * .80
+lev1Box2Up.x = xDisplay * .182
+lev1Box2Up.y = yDisplay * .55
 local lev1Box2NotFlipped = 1
 
 local lev1Box2Down = display.newImage( "activeTile.png" )
@@ -80,8 +80,8 @@ lev1Box2Down.isVisible = false
 
 
 local lev1Box3Up = display.newImage( "inactiveTile.png")
-lev1Box3Up.x = xDisplay * .555
-lev1Box3Up.y = yDisplay * .735
+lev1Box3Up.x = xDisplay * .278
+lev1Box3Up.y = yDisplay * .75
 local lev1Box3NotFlipped = 1
 
 local lev1Box3Down = display.newImage( "activeTile.png" )
@@ -90,8 +90,8 @@ lev1Box3Down.y = lev1Box3Up.y
 lev1Box3Down.isVisible = false
 
 local lev1Box4Up = display.newImage( "inactiveTile.png")
-lev1Box4Up.x = xDisplay * .84
-lev1Box4Up.y = yDisplay * .39
+lev1Box4Up.x = xDisplay * .8
+lev1Box4Up.y = yDisplay * .55
 local lev1Box4NotFlipped = 1
 
 local lev1Box4Down = display.newImage( "activeTile.png" )
@@ -100,8 +100,8 @@ lev1Box4Down.y = lev1Box4Up.y
 lev1Box4Down.isVisible = false
 
 local lev1Box5Up = display.newImage( "inactiveTile.png")
-lev1Box5Up.x = xDisplay * .84
-lev1Box5Up.y = yDisplay * .39
+lev1Box5Up.x = xDisplay * .7
+lev1Box5Up.y = yDisplay * .75
 local lev1Box5NotFlipped = 1
 
 local lev1Box5Down = display.newImage( "activeTile.png" )
@@ -139,7 +139,7 @@ local function onAccelerate( event )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
 
-    local gravMulti = 200
+    local gravMulti = myData.gravMulti
 
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1
@@ -236,7 +236,7 @@ local function checkCollision( event )
         lev1Box5Down.isVisible = true
     end
 
-    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped  and lev1Box5NotFlipped == 0 then
+    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped and lev1Box5NotFlipped == 0 then
         wonGame()
     end
 

@@ -92,9 +92,9 @@ lev1Box3Down.y = lev1Box3Up.y
 lev1Box3Down.isVisible = false
 
 -- Keep track of time in seconds
-local secondsLeft = 20
+local secondsLeft = 18
 
-local clockText = display.newText("00:20", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
+local clockText = display.newText("00:18", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
 
 --
 --local functions
@@ -120,7 +120,7 @@ local function onAccelerate( event )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
 
-    local gravMulti = 200
+    local gravMulti = myData.gravMulti
 
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1

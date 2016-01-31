@@ -128,7 +128,7 @@ local function onAccelerate( event )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
 
-    local gravMulti = 200
+    local gravMulti = myData.gravMulti
 
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1
@@ -226,7 +226,6 @@ local function checkCollision( event )
     if secondsLeft <= 0 then
         lostGame()
     end
-
 
 end
 
