@@ -7,6 +7,9 @@ local myData = require( "scripts.mydata" )
 
 local params
 
+local yDisplay = display.contentHeight
+local xDisplay = display.contentWidth
+
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
@@ -31,26 +34,27 @@ function scene:create( event )
     local sceneGroup = self.view
 
     params = event.params
+
+    local backBackground = display.newRect( xDisplay * .5, yDisplay * .5 , xDisplay, yDisplay )
+    sceneGroup:insert( backBackground )
+
+    local txtButtonSize = yDisplay * .1
         
     --
     -- setup a page background, really not that important though composer
     -- crashes out if there isn't a display object in the view.
     --
-    local background = display.newRect( 0, 0, 570, 360)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    sceneGroup:insert(background)
 
-    local selectLevelText = display.newText("Select a level", 125, 32, native.systemFontBold, 32)
-    selectLevelText:setFillColor( 0 )
+    local selectLevelText = display.newText("Select a level", yDisplay * .2, xDisplay * .5, native.systemFontBold, txtButtonSize * .5)
+    selectLevelText:setFillColor( black )
     selectLevelText.x = display.contentCenterX
     selectLevelText.y = 50
     sceneGroup:insert(selectLevelText)
 
     --local x = 90
     --local y = 115
-    local x = 0
-    local y = 0
+    local x = xDisplay * -.25
+    local y = yDisplay * .1
     local buttons = {}
     local buttonBackgrounds = {}
     local buttonGroups = {}
@@ -58,7 +62,7 @@ function scene:create( event )
     local cnt = 1
     for i = 1, myData.maxLevels do
         buttonGroups[i] = display.newGroup()
-        buttonBackgrounds[i] = display.newRoundedRect( x, y, 42, 32, 8 )
+        buttonBackgrounds[i] = display.newRoundedRect( x, y, yDisplay * .12, yDisplay * .12, 8 )
         buttonBackgrounds[i]:setFillColor( 1, 0, 1, 0.333 )
         buttonBackgrounds[i]:setStrokeColor( 1, 0, 1, 0.667 )
         buttonBackgrounds[i].strokeWidth = 1
@@ -74,12 +78,12 @@ function scene:create( event )
         else
             buttonGroups[i].alpha = 0.5
         end
-        buttons[i] = display.newText(tostring(i), 0, 0, native.systemFontBold, 28)
+        buttons[i] = display.newText(tostring(i), 0, 0, native.systemFontBold, txtButtonSize)
         buttons[i].x = x
         buttons[i].y = y
         buttonGroups[i]:insert(buttons[i])
 
-        x = x + 55
+        x = x + xDisplay * .25
         cnt = cnt + 1
         if cnt > 5 then
             cnt = 1
@@ -91,17 +95,6 @@ function scene:create( event )
     sceneGroup:insert(levelSelectGroup)
     levelSelectGroup.x = display.contentCenterX - 100
     levelSelectGroup.y = 120
-
-    local doneButton = widget.newButton({
-        id = "button1",
-        label = "Done",
-        width = 100,
-        height = 32,
-        onEvent = handleButtonEvent
-    })
-    doneButton.x = display.contentCenterX
-    doneButton.y = display.contentHeight - 40
-    sceneGroup:insert( doneButton )
 end
 
 function scene:show( event )

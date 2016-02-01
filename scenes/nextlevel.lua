@@ -24,6 +24,9 @@ function scene:create( event )
     local sceneGroup = self.view
 
     params = event.params
+
+    local backBackground = display.newRect( xDisplay * .5, yDisplay * .5 , xDisplay, yDisplay )
+    sceneGroup:insert( backBackground )
         
     myData.settings.currentLevel = myData.settings.currentLevel + 1
     utility.saveTable(myData.settings, "settings.json")

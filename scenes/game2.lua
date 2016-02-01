@@ -58,11 +58,9 @@ topWall.strokeWidth = 0
 topWall.alpha = 0;
 -- topWall:setStrokeColor( gray )
 
-local YBoxLoc = yDisplay * .71
-
 local lev1Box1Up = display.newImage( "inactiveTile.png")
-lev1Box1Up.x = xDisplay * .51
-lev1Box1Up.y = yDisplay * .41
+lev1Box1Up.x = xDisplay * .475
+lev1Box1Up.y = yDisplay * .468
 local lev1Box1NotFlipped = 1
 
 local lev1Box1Down = display.newImage( "activeTile.png" )
@@ -71,8 +69,8 @@ lev1Box1Down.y = lev1Box1Up.y
 lev1Box1Down.isVisible = false
 
 local lev1Box2Up = display.newImage( "inactiveTile.png")
-lev1Box2Up.x = xDisplay * .2
-lev1Box2Up.y = YBoxLoc
+lev1Box2Up.x = xDisplay * .17
+lev1Box2Up.y = yDisplay * .80
 local lev1Box2NotFlipped = 1
 
 local lev1Box2Down = display.newImage( "activeTile.png" )
@@ -82,8 +80,8 @@ lev1Box2Down.isVisible = false
 
 
 local lev1Box3Up = display.newImage( "inactiveTile.png")
-lev1Box3Up.x = xDisplay * .81
-lev1Box3Up.y = YBoxLoc
+lev1Box3Up.x = xDisplay * .555
+lev1Box3Up.y = yDisplay * .735
 local lev1Box3NotFlipped = 1
 
 local lev1Box3Down = display.newImage( "activeTile.png" )
@@ -91,10 +89,20 @@ lev1Box3Down.x = lev1Box3Up.x
 lev1Box3Down.y = lev1Box3Up.y
 lev1Box3Down.isVisible = false
 
--- Keep track of time in seconds
-local secondsLeft = 18
+local lev1Box4Up = display.newImage( "inactiveTile.png")
+lev1Box4Up.x = xDisplay * .84
+lev1Box4Up.y = yDisplay * .39
+local lev1Box4NotFlipped = 1
 
-local clockText = display.newText("00:18", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
+local lev1Box4Down = display.newImage( "activeTile.png" )
+lev1Box4Down.x = lev1Box4Up.x
+lev1Box4Down.y = lev1Box4Up.y
+lev1Box4Down.isVisible = false
+
+-- Keep track of time in seconds
+local secondsLeft = 15
+
+local clockText = display.newText("00:15", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
 
 local meatBallSound = myData.splatSound
 
@@ -144,8 +152,8 @@ local function wonGame()
                 someOtherKey = 10
             }
         }
-    composer.removeScene( "scenes.game2", false )
-    composer.gotoScene( "scenes.game2", options )
+    composer.removeScene( "scenes.game3", false )
+    composer.gotoScene( "scenes.game3", options )
 
 end
 
@@ -163,6 +171,7 @@ local function lostGame()
     composer.gotoScene( "scenes.gamelost", options )
 
 end
+
 
 -- Circle-based collision detection
 local function hasCollidedCircle( obj1, obj2 )
@@ -221,7 +230,18 @@ local function checkCollision( event )
         lev1Box3Down.isVisible = true
     end
 
-    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 then
+    if hasCollidedCircle(lev1Box4Up, meatBall) and lev1Box4NotFlipped then
+        lev1Box4NotFlipped = 0
+
+        if lev1Box4Up.isVisible then
+            audio.play( meatBallSound )
+        end
+
+        lev1Box4Up.isVisible = false
+        lev1Box4Down.isVisible = true
+    end
+
+    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped == 0 then
         wonGame()
     end
 
@@ -281,7 +301,7 @@ function scene:create( event )
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local background = display.newImage( "firstLevel.png", xDisplay * .5, yDisplay * .5 , true)
+    local background = display.newImage( "secondLevel.png", xDisplay * .5, yDisplay * .5 , true)
     --
     -- Insert it into the scene to be managed by Composer
     --
@@ -297,7 +317,6 @@ function scene:create( event )
     sceneGroup:insert( rightWall )
     sceneGroup:insert( topWall )
     sceneGroup:insert( botWall )
-    sceneGroup:insert(clockText)
 
     sceneGroup:insert( lev1Box1Up )
     sceneGroup:insert( lev1Box2Up )
@@ -305,6 +324,8 @@ function scene:create( event )
     sceneGroup:insert( lev1Box1Down )
     sceneGroup:insert( lev1Box2Down )
     sceneGroup:insert( lev1Box3Down )
+    sceneGroup:insert( lev1Box4Up )
+    sceneGroup:insert ( lev1Box4Down )
 
 
     --

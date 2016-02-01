@@ -1,5 +1,5 @@
 M = {}
-M.maxLevels = 20
+M.maxLevels = 2
 M.levelScore = 0
 M.products = {}
 M.settings = {}
@@ -9,6 +9,7 @@ M.settings.bestScore = 0
 M.settings.soundOn = true
 M.settings.musicOn = true
 M.settings.levels = {} 
+M.gravMulti = 300
 -- levels data members:
 --      .stars -- Stars earned per level
 --      .score -- Score for the level

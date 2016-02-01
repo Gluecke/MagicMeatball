@@ -20,6 +20,8 @@ function scene:create( event )
     -- 
     -- INSERT code here to initialize the scene
     -- e.g. add display objects to 'sceneGroup', add touch listeners, etc
+
+   
 end
 
 function scene:show( event )
@@ -33,6 +35,10 @@ function scene:show( event )
         -- 
         -- INSERT code here to make the scene come alive
         -- e.g. start timers, begin animation, play audio, etc
+
+
+        
+
     end 
 end
 
@@ -67,6 +73,7 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+
 
 -------------------------------------------------------------------------------
 
