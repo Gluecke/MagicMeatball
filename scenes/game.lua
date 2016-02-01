@@ -80,7 +80,6 @@ lev1Box2Down.x = lev1Box2Up.x
 lev1Box2Down.y = lev1Box2Up.y
 lev1Box2Down.isVisible = false
 
-
 local lev1Box3Up = display.newImage( "inactiveTile.png")
 lev1Box3Up.x = xDisplay * .81
 lev1Box3Up.y = YBoxLoc
@@ -101,7 +100,6 @@ local meatBallSound = myData.splatSound
 --
 --local functions
 --
-
 local function updateTime()
     -- decrement the number of seconds
     secondsLeft = secondsLeft - 1

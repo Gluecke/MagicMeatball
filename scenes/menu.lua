@@ -56,17 +56,6 @@ function scene:create( event )
     local sceneGroup = self.view
 
     params = event.params
-        
-    --
-    -- setup a page background, really not that important though composer
-    -- crashes out if there isn't a display object in the view.
-    --
-    --[[
-    local background = display.newRect( 0, 0, 570, 360 )
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    sceneGroup:insert( background )
-    --]]
 
     local backBackground = display.newRect( xDisplay * .5, yDisplay * .5 , xDisplay, yDisplay )
     sceneGroup:insert( backBackground )
@@ -86,7 +75,7 @@ function scene:create( event )
     local buttonWidth = xDisplay
     local buttonHeight = yDisplay * .15
 
-    -- Create the widget
+    -- Create play button
     local playButton = widget.newButton({
         id = "button1",
         label = "",
@@ -101,7 +90,7 @@ function scene:create( event )
     playButton.y = yDisplay * .075
     sceneGroup:insert( playButton )
 
-    -- Create the widget
+    -- Create credits button
     local creditsButton = widget.newButton({
         id = "button4",
         label = "",
@@ -116,6 +105,7 @@ function scene:create( event )
     creditsButton.y = yDisplay * .075 + buttonHeight
     sceneGroup:insert( creditsButton )
 
+    -- Create cheat button
     local endHackButton = widget.newButton({
         id = "button1",
         label = "",
@@ -128,7 +118,7 @@ function scene:create( event )
     endHackButton.y = yDisplay * .99
     sceneGroup:insert( endHackButton )
 
-
+    --Reference Drum loop sound
     drumLoop = myData.drumLoop
 
     audio.setVolume( 0.2, { channel=1 } )
