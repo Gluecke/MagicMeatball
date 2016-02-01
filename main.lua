@@ -13,7 +13,7 @@ math.randomseed( os.time() )
 
 if device.isAndroid then
 	widget.setTheme( "widget_theme_android_holo_light" )
-    store = require("plugin.google.iap.v3")
+    --store = require("plugin.google.iap.v3")
 end
 
 --
@@ -64,7 +64,15 @@ end
 -- Load your global sounds here
 -- Load scene specific sounds in the scene
 --
--- myData.splatSound = audio.load("audio/splat.wav")
+myData.splatSound = audio.loadSound("audio/Squish.wav")
+myData.winSound = audio.loadSound( "audio/heavenGate.mp3")
+myData.loseSound = audio.loadSound( "audio/Fail.mp3")
+myData.drumLoop = audio.loadSound( "audio/DrumLoop.wav")
+
+
+
+
+
 --
 
 --
@@ -80,6 +88,7 @@ local function onKeyEvent( event )
         if ( composer.getCurrentSceneName() == "scenes.menu" ) then
             native.requestExit()
         else
+            composer.removeScene( "scenes.menu", false )
             composer.gotoScene( "scenes.menu", { effect="crossFade", time=500 } )
         end
         return true
@@ -112,6 +121,7 @@ local function systemEvents(event)
         --
         -- Go to the menu
         --
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene( "scenes.menu", { time = 250, effect = "fade" } )
     end
     return true

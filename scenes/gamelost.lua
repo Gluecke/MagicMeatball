@@ -8,12 +8,20 @@ local myData = require( "scripts.mydata" )
 local gameNetwork = require( "gameNetwork" )
 local device = require( "scripts.device" )
 
+local params
+
 local xDisplay = display.contentWidth
 local yDisplay = display.contentHeight
 
-local flyingMoster = display.newImage( "monster.png" )
+local flyingMoster = display.newImage( "sadMonster.png" )
 flyingMoster.x = xDisplay * .5
 flyingMoster.y = yDisplay * .25
+
+audio.stop( 1 )
+
+local loseSound = myData.loseSound
+
+audio.play( loseSound )
 
 local function handleButtonEvent( event )
 
@@ -54,13 +62,6 @@ function scene:create( event )
     params = event.params
 
     physics.start( )
-        
-    local gameOverText = display.newText("Game Over", 0, 0, native.systemFontBold, 32 )
-    gameOverText:setFillColor( 0 )
-    gameOverText.x = display.contentCenterX
-    gameOverText.y = 50
-    sceneGroup:insert(gameOverText)
-    sceneGroup:insert( flyingMoster )
 
     flyingMoster.isVisible = false
 
@@ -70,35 +71,26 @@ function scene:create( event )
     flyingMoster.gravityScale = 0
 
     sceneGroup:insert( flyingMoster )
+        
+    local gameOverText = display.newText("Game Over", 0, 0, native.systemFontBold, 32 )
+    gameOverText:setFillColor( 0 )
+    gameOverText.x = display.contentCenterX
+    gameOverText.y = 50
+    sceneGroup:insert(gameOverText)
+    sceneGroup:insert( flyingMoster )
 
     local doneButton = widget.newButton({
         id = "button1",
-        label = "ALL HAIL!",
+        label = "Let down again...",
         width = xDisplay,
         height = yDisplay * .15,
         onEvent = handleButtonEvent,
         x = xDisplay * .5,
         y = yDisplay * .85,
-        fontSize = yDisplay * .1,
+        fontSize = yDisplay * .07,
         font = "NoodleScript"
     })
     sceneGroup:insert( doneButton )
-
-    local winSound = myData.winSound
-
-    audio.stop( 1 )
-
-    audio.setVolume( .5, { channel=2 } )
-
-    local options =
-        {
-            channel = 2,
-            duration = 30000,
-            fadein = 0
-        }
-
-    audio.play(  winSound, options )
-
 end
 
 function scene:show( event )

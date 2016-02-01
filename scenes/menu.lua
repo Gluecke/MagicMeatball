@@ -1,6 +1,5 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
 local widget = require( "widget" )
 local utility = require( "scripts.utility" )
 local ads = require( "ads" )
@@ -9,30 +8,44 @@ local params
 
 local myData = require( "scripts.mydata" )
 
+local xDisplay = display.contentWidth
+local yDisplay = display.contentHeight
+
+local meatBallSound = myData.splatSound
+
+local buttonOptions =
+    {
+        channel = 3,
+        loops = 0,
+        duration = 30000,
+        fadein = 0
+    }
+audio.setVolume( 0.1, { channel=3 } )
+
+
 local function handlePlayButtonEvent( event )
     if ( "ended" == event.phase ) then
-        composer.removeScene( "scenes.levelselect", false )
-        composer.gotoScene("scenes.levelselect", { effect = "crossFade", time = 333 })
-    end
-end
-
-local function handleHelpButtonEvent( event )
-    if ( "ended" == event.phase ) then
-        composer.gotoScene("scenes.help", { effect = "crossFade", time = 333, isModal = true })
+        audio.play( meatBallSound, buttonOptions )
+        composer.removeScene( "scenes.game", false )
+        composer.gotoScene("scenes.game", { effect = "crossFade", time = 333 })
     end
 end
 
 local function handleCreditsButtonEvent( event )
 
     if ( "ended" == event.phase ) then
+        audio.play( meatBallSound, buttonOptions )
+        composer.removeScene( "scenes.gamecredits", false )
         composer.gotoScene("scenes.gamecredits", { effect = "crossFade", time = 333 })
     end
 end
 
-local function handleSettingsButtonEvent( event )
+local function handleEndHackButtonEvent( event )
 
-    if ( "ended" == event.phase ) then
-        composer.gotoScene("scenes.gamesettings", { effect = "crossFade", time = 333 })
+    if ("ended" == event.phase ) then
+        audio.play( meatBallSound, buttonOptions)
+        composer.removeScene( "scenes.gameover", false )
+        composer.gotoScene("scenes.gameover", { effect = "crossFade", time = 333 })
     end
 end
 
@@ -48,64 +61,86 @@ function scene:create( event )
     -- setup a page background, really not that important though composer
     -- crashes out if there isn't a display object in the view.
     --
+    --[[
     local background = display.newRect( 0, 0, 570, 360 )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     sceneGroup:insert( background )
+    --]]
 
-    local title = display.newText("Game Title", 100, 32, native.systemFontBold, 32 )
-    title.x = display.contentCenterX
-    title.y = 40
+    local backBackground = display.newRect( xDisplay * .5, yDisplay * .5 , xDisplay, yDisplay )
+    sceneGroup:insert( backBackground )
+
+    local background = display.newImage( "menuScreen.png", xDisplay * .5, yDisplay * .5 , true)
+    background.height = yDisplay * 1
+
+    sceneGroup:insert( background )
+
+    local title = display.newText("", xDisplay * .5 , yDisplay * .05, native.systemFontBold, yDisplay * .05 )
     title:setFillColor( 0 )
     sceneGroup:insert( title )
+
+    local yDisplay = display.contentHeight
+    local xDisplay = display.contentWidth
+
+    local buttonWidth = xDisplay
+    local buttonHeight = yDisplay * .15
 
     -- Create the widget
     local playButton = widget.newButton({
         id = "button1",
-        label = "Play",
-        width = 100,
-        height = 32,
-        onEvent = handlePlayButtonEvent
+        label = "",
+        width = buttonWidth,
+        height = buttonHeight,
+        onEvent = handlePlayButtonEvent,
+        fontSize = yDisplay * .1,
+        defaultFile = "playButton.png",
+        overFile = "playButton.png"
     })
-    playButton.x = display.contentCenterX
-    playButton.y = display.contentCenterY - 90
+    playButton.x = xDisplay * .5
+    playButton.y = yDisplay * .075
     sceneGroup:insert( playButton )
-
-    -- Create the widget
-    local settingsButton = widget.newButton({
-        id = "button2",
-        label = "Settings",
-        width = 100,
-        height = 32,
-        onEvent = handleSettingsButtonEvent
-    })
-    settingsButton.x = display.contentCenterX
-    settingsButton.y = display.contentCenterY - 30
-    sceneGroup:insert( settingsButton )
-
-    -- Create the widget
-    local helpButton = widget.newButton({
-        id = "button3",
-        label = "Help",
-        width = 100,
-        height = 32,
-        onEvent = handleHelpButtonEvent
-    })
-    helpButton.x = display.contentCenterX
-    helpButton.y = display.contentCenterY + 30
-    sceneGroup:insert( helpButton )
 
     -- Create the widget
     local creditsButton = widget.newButton({
         id = "button4",
-        label = "Credits",
-        width = 100,
-        height = 32,
-        onEvent = handleCreditsButtonEvent
+        label = "",
+        width = buttonWidth,
+        height = buttonHeight,
+        onEvent = handleCreditsButtonEvent,
+        fontSize = yDisplay * .1,
+        defaultFile = "creditButton.png",
+        overFile = "creditButton.png"
     })
-    creditsButton.x = display.contentCenterX
-    creditsButton.y = display.contentCenterY + 90
+    creditsButton.x = xDisplay / 2
+    creditsButton.y = yDisplay * .075 + buttonHeight
     sceneGroup:insert( creditsButton )
+
+    local endHackButton = widget.newButton({
+        id = "button1",
+        label = "",
+        width = buttonWidth * .1,
+        height = buttonHeight * .15,
+        onEvent = handleEndHackButtonEvent,
+        fontSize = yDisplay * .1
+    })
+    endHackButton.x = xDisplay * .01
+    endHackButton.y = yDisplay * .99
+    sceneGroup:insert( endHackButton )
+
+
+    drumLoop = myData.drumLoop
+
+    audio.setVolume( 0.2, { channel=1 } )
+
+    local options =
+        {
+            channel = 1,
+            loops = -1,
+            duration = 30000,
+            fadein = 5000
+        }
+    audio.play( drumLoop , options )
 
 end
 
@@ -127,6 +162,8 @@ end
 
 function scene:hide( event )
     local sceneGroup = self.view
+
+    audio.stop( 1 )
     
     if event.phase == "will" then
     end
@@ -134,6 +171,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
+    audio.stop( 1 )
     local sceneGroup = self.view
     
 end
