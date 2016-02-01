@@ -8,8 +8,6 @@ local myData = require( "scripts.mydata" )
 local gameNetwork = require( "gameNetwork" )
 local device = require( "scripts.device" )
 
-local params
-
 local xDisplay = display.contentWidth
 local yDisplay = display.contentHeight
 
@@ -28,9 +26,23 @@ local function handleButtonEvent( event )
                 someOtherKey = 10
             }
         }
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene( "scenes.menu", options )
     end
     return true
+end
+
+local function onAccelerate( event )
+
+    local gravMulti = myData.gravMulti / 2
+
+    local vXForce =  math.round(event.xGravity * gravMulti)
+    local vYForce = math.round(event.yGravity * gravMulti) * - 1
+
+    --vYGrav.text = vXPrefix .. vYForce
+    --vXGrav.text = vYPrefix .. vXForce
+
+    flyingMoster:applyForce( vXForce, vYForce, flyingMoster.x, flyingMoster.y)
 end
 
 --
@@ -40,6 +52,8 @@ function scene:create( event )
     local sceneGroup = self.view
 
     params = event.params
+
+    physics.start( )
         
     local gameOverText = display.newText("Game Over", 0, 0, native.systemFontBold, 32 )
     gameOverText:setFillColor( 0 )
@@ -48,17 +62,43 @@ function scene:create( event )
     sceneGroup:insert(gameOverText)
     sceneGroup:insert( flyingMoster )
 
+    flyingMoster.isVisible = false
+
+    flyingMoster.isVisible = true
+
+    physics.addBody( flyingMoster, "dynamic" )
+    flyingMoster.gravityScale = 0
+
+    sceneGroup:insert( flyingMoster )
+
     local doneButton = widget.newButton({
         id = "button1",
-        label = "You WIN!!",
+        label = "ALL HAIL!",
         width = xDisplay,
         height = yDisplay * .15,
         onEvent = handleButtonEvent,
         x = xDisplay * .5,
         y = yDisplay * .85,
-        fontSize = yDisplay * .1
+        fontSize = yDisplay * .1,
+        font = "NoodleScript"
     })
     sceneGroup:insert( doneButton )
+
+    local winSound = myData.winSound
+
+    audio.stop( 1 )
+
+    audio.setVolume( .5, { channel=2 } )
+
+    local options =
+        {
+            channel = 2,
+            duration = 30000,
+            fadein = 0
+        }
+
+    audio.play(  winSound, options )
+
 end
 
 function scene:show( event )
@@ -70,22 +110,13 @@ function scene:show( event )
 
     if event.phase == "did" then
 
-        flyingMoster.isVisible = false
-
-        flyingMoster.isVisible = true
-
-        physics.addBody( flyingMoster, "dynamic" )
-        flyingMoster.gravityScale = .15
-
-        sceneGroup:insert( flyingMoster )
-
-
-        flyingMoster:applyForce(0, 100, flyingMoster.x, flyingMoster.y)
     end
 end
 
 function scene:hide( event )
     local sceneGroup = self.view
+
+    Runtime:removeEventListener( "accelerometer", onAccelerate )
     
     if event.phase == "will" then
         physics.stop( )
@@ -106,4 +137,5 @@ scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
+Runtime:addEventListener( "accelerometer", onAccelerate )
 return scene

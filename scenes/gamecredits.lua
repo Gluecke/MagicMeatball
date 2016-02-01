@@ -12,6 +12,7 @@ local yDisplay = display.contentHeight
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
+        composer.removeScene( "scenes.menu", false )
         composer.gotoScene("scenes.menu", { effect = "crossFade", time = 333 })
     end
 end
@@ -32,7 +33,7 @@ function scene:create( event )
     sceneGroup:insert( backBackground )
 
 
-    local title = display.newText( "Magic Meatball", 100, 32, native.systemFontBold, yDisplay * .05)
+    local title = display.newText( "Magic Meatball", 100, 64, "NoodleScript", yDisplay * .075)
     title.x = display.contentCenterX
     title.y = display.contentHeight * .15
     title:setFillColor( 0 )
@@ -44,7 +45,7 @@ function scene:create( event )
     creditText.y = display.contentHeight * .35
     sceneGroup:insert(creditText)
 
-    local creditText = display.newText( "Natasha Matthews and", 250, 250, native.systemFont,  yDisplay * .05 )
+    local creditText = display.newText( "Natasha Matthews and", 250, 250, native.systemFont, yDisplay * .05 )
     creditText:setFillColor( 0 )
     creditText.x = display.contentCenterX
     creditText.y = display.contentHeight * .45
@@ -74,7 +75,8 @@ function scene:create( event )
         width = xDisplay,
         height = yDisplay * .15,
         onEvent = handleButtonEvent,
-        fontSize = yDisplay * .075
+        fontSize = yDisplay * .075,
+        font = "NoodleScript"
     })
     doneButton.x = display.contentCenterX
     doneButton.y = display.contentHeight * .9

@@ -104,6 +104,8 @@ local secondsLeft = 15
 
 local clockText = display.newText("00:15", display.contentCenterX, yDisplay * .1, "NoodleScript", yDisplay * .09)
 
+local meatBallSound = myData.splatSound
+
 --
 --local functions
 --
@@ -128,7 +130,7 @@ local function onAccelerate( event )
     local vXPrefix = "xGravety: "
     local vYPrefix = "yGravety: "
 
-    local gravMulti = 200
+    local gravMulti = myData.gravMulti
 
     local vXForce =  math.round(event.xGravity * gravMulti)
     local vYForce = math.round(event.yGravity * gravMulti) * - 1
@@ -150,8 +152,8 @@ local function wonGame()
                 someOtherKey = 10
             }
         }
-    composer.removeScene( "scenes.gameover", false )
-    composer.gotoScene( "scenes.gameover", options )
+    composer.removeScene( "scenes.game3", false )
+    composer.gotoScene( "scenes.game3", options )
 
 end
 
@@ -196,6 +198,11 @@ local function checkCollision( event )
 
     if hasCollidedCircle(lev1Box1Up, meatBall) and lev1Box1NotFlipped then
         lev1Box1NotFlipped = 0
+
+        if lev1Box1Up.isVisible then
+            audio.play( meatBallSound )
+        end
+
         lev1Box1Up.isVisible = false
         lev1Box1Down.isVisible = true
     end
@@ -203,30 +210,44 @@ local function checkCollision( event )
 
     if hasCollidedCircle(lev1Box2Up, meatBall) and lev1Box2NotFlipped then
         lev1Box2NotFlipped = 0
+
+        if lev1Box2Up.isVisible then
+            audio.play( meatBallSound )
+        end
+
         lev1Box2Up.isVisible = false
         lev1Box2Down.isVisible = true
     end
 
     if hasCollidedCircle(lev1Box3Up, meatBall) and lev1Box3NotFlipped then
         lev1Box3NotFlipped = 0
+
+        if lev1Box3Up.isVisible then
+            audio.play( meatBallSound )
+        end
+
         lev1Box3Up.isVisible = false
         lev1Box3Down.isVisible = true
     end
 
     if hasCollidedCircle(lev1Box4Up, meatBall) and lev1Box4NotFlipped then
         lev1Box4NotFlipped = 0
+
+        if lev1Box4Up.isVisible then
+            audio.play( meatBallSound )
+        end
+
         lev1Box4Up.isVisible = false
         lev1Box4Down.isVisible = true
     end
 
-    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped then
+    if lev1Box3NotFlipped == 0 and lev1Box2NotFlipped == 0 and lev1Box1NotFlipped == 0 and lev1Box4NotFlipped == 0 then
         wonGame()
     end
 
     if secondsLeft <= 0 then
         lostGame()
     end
-
 
 end
 
